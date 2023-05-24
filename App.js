@@ -3,12 +3,22 @@ import * as Font from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, CheckBox } from "react-native-elements";
+import { ThemeProvider, createTheme } from "react-native-elements";
+import JobFinderApp from "./src/jobFinderApp";
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from "react-native-safe-area-context";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [checked, setChecked] = useState(false);
 
+  const orangeTheme = {
+    colors: {
+      primary: '#FFA500', // Orange color
+    },
+  };
   useEffect(() => {
     async function prepare() {
       try {
@@ -39,28 +49,24 @@ export default function App() {
   if (!appIsReady) {
     return null;
   }
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+
 
   return (
-    <View style={styles.container} onLayout={onLayoutRootView}>
-      <Button
-        raised
-        icon={{ name: "cached", color: "white" }}
-        title="RAISED WITH ICON"
-      />
-      <CheckBox
-        title="Click Here"
-        checked={checked}
-        onPress={() => setChecked((checked) => !checked)}
-      />
-    </View>
+    <ThemeProvider theme={orangeTheme}>
+      <View style={styles.container} onLayout={onLayoutRootView}>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <JobFinderApp />
+        </SafeAreaProvider>
+      </View>
+    </ThemeProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
